@@ -5,7 +5,7 @@ from basicsr.archs.rrdbnet_arch import RRDBNet
 from realesrgan import RealESRGANer
 from tqdm import tqdm
 
-from .utils import list_images, load_image_cv2, save_image_cv2
+from .utils import list_images, load_image_cv2, save_image_cv2, has_cuda
 
 MODEL_URL = "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth"
 
@@ -22,7 +22,7 @@ def get_enhancer() -> RealESRGANer:
         tile=400,
         tile_pad=10,
         pre_pad=0,
-        half=True,
+        half=has_cuda(),
     )
 
 

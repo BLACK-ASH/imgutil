@@ -5,7 +5,7 @@ from realesrgan import RealESRGANer
 from realesrgan.archs.srvgg_arch import SRVGGNetCompact
 from tqdm import tqdm
 
-from .utils import list_images, load_image_cv2, save_image_cv2
+from .utils import list_images, load_image_cv2, save_image_cv2, has_cuda
 
 MODEL_BASE = "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/"
 MODELS = {
@@ -27,7 +27,7 @@ def get_deblurred_upsampler(strength: float) -> RealESRGANer:
         tile=400,
         tile_pad=10,
         pre_pad=0,
-        half=True,
+        half=has_cuda(),
     )
 
 

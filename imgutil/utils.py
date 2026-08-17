@@ -2,9 +2,14 @@ from pathlib import Path
 
 import cv2
 import numpy as np
+import torch
 from PIL import Image
 
 SUPPORTED = {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tiff", ".tif"}
+
+
+def has_cuda() -> bool:
+    return torch.cuda.is_available()
 
 
 def list_images(input_dir: Path) -> list[Path]:
