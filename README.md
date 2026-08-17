@@ -8,64 +8,31 @@ Multi-utility image processing CLI tool.
 pip install -e .
 ```
 
+## Quick Start
+
+```bash
+imgutil remove photos/ processed/          # remove backgrounds
+imgutil upscale photos/ upscaled/ -s 4     # 4x upscale
+imgutil deblur blurry/ fixed/ -s 0.8       # fix blurry photos
+imgutil enhance photos/ enhanced/          # improve quality
+```
+
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `imgutil remove` | Remove backgrounds (U²-Net) |
-| `imgutil upscale` | Upscale images (2x/4x) |
-| `imgutil deblur` | Deblur/denoise (adjustable strength) |
-| `imgutil enhance` | Sharpen + denoise (same dimensions) |
+| Command | Description | Key options |
+|---------|-------------|-------------|
+| `imgutil remove` | Remove backgrounds (U²-Net) | `-f webp` (output format) |
+| `imgutil upscale` | Upscale images (2x/4x) | `-s 2` or `-s 4` |
+| `imgutil deblur` | Deblur/denoise | `-s 0.7` (strength 0.0-1.0) |
+| `imgutil enhance` | Sharpen + denoise (same dimensions) | — |
 
 Global options: `-h` (help), `-v` (version)
 
-### Background Removal
+**Backward compatible:** `remove-bg photos/ out/` works too.
 
-```bash
-imgutil remove photos/ processed/ -f webp
-```
+## Documentation
 
-| Flag | Description |
-|------|-------------|
-| `-f`, `--format` | Output format: `png` (default), `webp`, etc. |
-
-### Upscale
-
-```bash
-imgutil upscale photos/ upscaled/ -s 4
-```
-
-| Flag | Description |
-|------|-------------|
-| `-s`, `--scale` | Upscale factor: `2` or `4` (default: 4) |
-
-### Deblur
-
-```bash
-imgutil deblur blurry/ fixed/ -s 0.8
-```
-
-| Flag | Description |
-|------|-------------|
-| `-s`, `--strength` | Denoise strength 0.0-1.0 (default: 0.7) |
-
-### Enhance
-
-```bash
-imgutil enhance photos/ enhanced/
-```
-
-Sharpen and denoise without changing dimensions.
-
-### Backward Compatibility
-
-```bash
-remove-bg photos/ processed/   # same as imgutil remove
-```
-
-## Supported Input Formats
-
-`.jpg`, `.jpeg`, `.png`, `.webp`, `.bmp`, `.tiff`, `.tif`
+- [**User Manual**](MANUAL.md) — Full usage guide, examples, troubleshooting
 
 ## Use Cases
 
