@@ -43,5 +43,6 @@ remove-bg test_imgs/ test_out/ -f png
 
 - Output filenames match input filenames with the chosen extension.
 - The output folder is created automatically if it doesn't exist.
-- First run downloads a ~170 MB PyTorch model into `.remove/`.
+- First run downloads a ~1 GB ONNX model into `~/.rembg/models/`.
 - Supported input formats are case-insensitive.
+
