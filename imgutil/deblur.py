@@ -3,6 +3,7 @@ from pathlib import Path
 import click
 from realesrgan import RealESRGANer
 from realesrgan.archs.srvgg_arch import SRVGGNetCompact
+from tqdm import tqdm
 
 from .utils import list_images, load_image_cv2, save_image_cv2
 
@@ -35,7 +36,6 @@ def deblur_image(input_path: Path, output_path: Path, strength: float) -> None:
     img = load_image_cv2(input_path)
     output, _ = upsampler.enhance(img, outscale=1.0)
     save_image_cv2(output_path, output)
-    click.echo(f"  {input_path.name} -> {output_path}")
 
 
 @click.command()
@@ -50,16 +50,15 @@ def main(input: Path, output: Path, strength: float):
         raise SystemExit(1)
 
     output.mkdir(parents=True, exist_ok=True)
-    click.echo(f"Processing {len(images)} image(s) (strength={strength})...")
 
     ok = 0
-    for img_path in images:
+    for img_path in tqdm(images, desc="Deblurring", unit="img"):
         out_path = output / f"{img_path.stem}.png"
         try:
             deblur_image(img_path, out_path, strength)
             ok += 1
         except Exception as e:
-            click.echo(f"  {img_path.name} failed: {e}", err=True)
+            click.echo(f"\n  {img_path.name} failed: {e}", err=True)
 
     click.echo(f"Done: {ok}/{len(images)} succeeded.")
 

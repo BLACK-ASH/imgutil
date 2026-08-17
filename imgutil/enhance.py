@@ -3,6 +3,7 @@ from pathlib import Path
 import click
 from basicsr.archs.rrdbnet_arch import RRDBNet
 from realesrgan import RealESRGANer
+from tqdm import tqdm
 
 from .utils import list_images, load_image_cv2, save_image_cv2
 
@@ -30,7 +31,6 @@ def enhance_image(input_path: Path, output_path: Path) -> None:
     img = load_image_cv2(input_path)
     output, _ = enhancer.enhance(img, outscale=1.0)
     save_image_cv2(output_path, output)
-    click.echo(f"  {input_path.name} -> {output_path}")
 
 
 @click.command()
@@ -44,16 +44,15 @@ def main(input: Path, output: Path):
         raise SystemExit(1)
 
     output.mkdir(parents=True, exist_ok=True)
-    click.echo(f"Processing {len(images)} image(s)...")
 
     ok = 0
-    for img_path in images:
+    for img_path in tqdm(images, desc="Enhancing", unit="img"):
         out_path = output / f"{img_path.stem}.png"
         try:
             enhance_image(img_path, out_path)
             ok += 1
         except Exception as e:
-            click.echo(f"  {img_path.name} failed: {e}", err=True)
+            click.echo(f"\n  {img_path.name} failed: {e}", err=True)
 
     click.echo(f"Done: {ok}/{len(images)} succeeded.")
 

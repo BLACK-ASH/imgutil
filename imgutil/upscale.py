@@ -3,6 +3,7 @@ from pathlib import Path
 import click
 from basicsr.archs.rrdbnet_arch import RRDBNet
 from realesrgan import RealESRGANer
+from tqdm import tqdm
 
 from .utils import list_images, load_image_cv2, save_image_cv2
 
@@ -30,7 +31,6 @@ def upscale_image(input_path: Path, output_path: Path, scale: int) -> None:
     img = load_image_cv2(input_path)
     output, _ = upsampler.enhance(img, outscale=scale)
     save_image_cv2(output_path, output)
-    click.echo(f"  {input_path.name} ({scale}x) -> {output_path}")
 
 
 @click.command()
@@ -45,16 +45,15 @@ def main(input: Path, output: Path, scale: str):
         raise SystemExit(1)
 
     output.mkdir(parents=True, exist_ok=True)
-    click.echo(f"Processing {len(images)} image(s) at {scale}x...")
 
     ok = 0
-    for img_path in images:
+    for img_path in tqdm(images, desc=f"Upscaling {scale}x", unit="img"):
         out_path = output / f"{img_path.stem}_{scale}x.png"
         try:
             upscale_image(img_path, out_path, int(scale))
             ok += 1
         except Exception as e:
-            click.echo(f"  {img_path.name} failed: {e}", err=True)
+            click.echo(f"\n  {img_path.name} failed: {e}", err=True)
 
     click.echo(f"Done: {ok}/{len(images)} succeeded.")
 
