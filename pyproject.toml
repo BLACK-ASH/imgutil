@@ -3,18 +3,23 @@ requires = ["setuptools>=64"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "remove-bg"
-version = "0.1.0"
-description = "Remove image backgrounds in bulk"
+name = "imgutil"
+version = "0.2.0"
+description = "Multi-utility image processing: background removal, upscaling, deblurring, enhancement"
 requires-python = ">=3.10"
 dependencies = [
     "rembg[gpu]",
     "Pillow",
     "click",
+    "realesrgan",
+    "basicsr",
+    "gfpgan",
+    "opencv-python",
 ]
 
 [project.scripts]
-remove-bg = "remove_bg.cli:main"
+imgutil = "imgutil.cli:main"
+remove-bg = "imgutil.remove:main"
 
 [tool.setuptools.packages.find]
-include = ["remove_bg*"]
+include = ["imgutil*"]

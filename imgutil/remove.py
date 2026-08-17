@@ -4,20 +4,14 @@ import click
 from rembg import remove
 from PIL import Image
 
-SUPPORTED = {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tiff", ".tif"}
+from .utils import list_images, save_image_pil
 
 
-def process_image(input_path: Path, output_path: Path) -> bool:
-    try:
-        input_image = Image.open(input_path)
-        output_image = remove(input_image)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        output_image.save(output_path, "PNG")
-        click.echo(f"  {input_path.name} -> {output_path}")
-        return True
-    except Exception as e:
-        click.echo(f"  {input_path.name} failed: {e}", err=True)
-        return False
+def remove_background(input_path: Path, output_path: Path, fmt: str) -> None:
+    input_image = Image.open(input_path)
+    output_image = remove(input_image)
+    save_image_pil(output_path, output_image, fmt.upper())
+    click.echo(f"  {input_path.name} -> {output_path}")
 
 
 @click.command()
@@ -26,8 +20,7 @@ def process_image(input_path: Path, output_path: Path) -> bool:
 @click.option("-f", "--format", "fmt", default="png", help="Output format (default: png)")
 def main(input: Path, output: Path, fmt: str):
     """Remove backgrounds from all images in INPUT and save to OUTPUT."""
-    images = sorted(f for f in input.iterdir() if f.suffix.lower() in SUPPORTED)
-
+    images = list_images(input)
     if not images:
         click.echo(f"No supported images found in {input}")
         raise SystemExit(1)
@@ -38,8 +31,11 @@ def main(input: Path, output: Path, fmt: str):
     ok = 0
     for img_path in images:
         out_path = output / f"{img_path.stem}.{fmt.lower()}"
-        if process_image(img_path, out_path):
+        try:
+            remove_background(img_path, out_path, fmt)
             ok += 1
+        except Exception as e:
+            click.echo(f"  {img_path.name} failed: {e}", err=True)
 
     click.echo(f"Done: {ok}/{len(images)} succeeded.")
 
