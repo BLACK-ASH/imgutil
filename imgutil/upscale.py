@@ -1,37 +1,32 @@
 from pathlib import Path
 
 import click
-import cv2
 from basicsr.archs.rrdbnet_arch import RRDBNet
 from realesrgan import RealESRGANer
 
 from .utils import list_images, load_image_cv2, save_image_cv2
 
-MODEL_URLS = {
-    2: "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth",
-    4: "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth",
-}
+MODEL_URL = "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth"
 
 
-def get_upsampler(scale: int, device: str = "auto") -> RealESRGANer:
+def get_upsampler() -> RealESRGANer:
     model = RRDBNet(
         num_in_ch=3, num_out_ch=3, num_feat=64,
         num_block=23, num_grow_ch=32, scale=4,
     )
-    half = device != "cpu"
     return RealESRGANer(
         scale=4,
-        model_path=MODEL_URLS[scale],
+        model_path=MODEL_URL,
         model=model,
         tile=400,
         tile_pad=10,
         pre_pad=0,
-        half=half,
+        half=True,
     )
 
 
 def upscale_image(input_path: Path, output_path: Path, scale: int) -> None:
-    upsampler = get_upsampler(scale)
+    upsampler = get_upsampler()
     img = load_image_cv2(input_path)
     output, _ = upsampler.enhance(img, outscale=scale)
     save_image_cv2(output_path, output)
