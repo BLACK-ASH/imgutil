@@ -39,6 +39,7 @@ def deblur_image(input_path: Path, output_path: Path, strength: float) -> None:
 
 
 @click.command()
+@click.help_option("-h", "--help")
 @click.argument("input", type=click.Path(exists=True, file_okay=False, path_type=Path))
 @click.argument("output", type=click.Path(file_okay=False, path_type=Path))
 @click.option("-s", "--strength", type=float, default=0.7, help="Denoise strength 0.0-1.0 (default: 0.7)")

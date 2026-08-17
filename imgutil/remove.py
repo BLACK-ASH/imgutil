@@ -15,6 +15,7 @@ def remove_background(input_path: Path, output_path: Path, fmt: str) -> None:
 
 
 @click.command()
+@click.help_option("-h", "--help")
 @click.argument("input", type=click.Path(exists=True, file_okay=False, path_type=Path))
 @click.argument("output", type=click.Path(file_okay=False, path_type=Path))
 @click.option("-f", "--format", "fmt", default="png", help="Output format (default: png)")

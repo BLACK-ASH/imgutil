@@ -34,6 +34,7 @@ def enhance_image(input_path: Path, output_path: Path) -> None:
 
 
 @click.command()
+@click.help_option("-h", "--help")
 @click.argument("input", type=click.Path(exists=True, file_okay=False, path_type=Path))
 @click.argument("output", type=click.Path(file_okay=False, path_type=Path))
 def main(input: Path, output: Path):

@@ -34,6 +34,7 @@ def upscale_image(input_path: Path, output_path: Path, scale: int) -> None:
 
 
 @click.command()
+@click.help_option("-h", "--help")
 @click.argument("input", type=click.Path(exists=True, file_okay=False, path_type=Path))
 @click.argument("output", type=click.Path(file_okay=False, path_type=Path))
 @click.option("-s", "--scale", type=click.Choice(["2", "4"]), default="4", help="Upscale factor (default: 4)")

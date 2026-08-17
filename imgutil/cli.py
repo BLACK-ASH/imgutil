@@ -4,7 +4,8 @@ from . import __version__
 
 
 @click.group()
-@click.version_option(__version__, prog_name="imgutil")
+@click.version_option(__version__, "-v", "--version", prog_name="imgutil")
+@click.help_option("-h", "--help")
 def main():
     """imgutil — multi-utility image processing tool."""
 
