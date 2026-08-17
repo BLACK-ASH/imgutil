@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "remove-bg"
+version = "0.1.0"
+description = "Remove image backgrounds in bulk"
+requires-python = ">=3.10"
+dependencies = [
+    "rembg[gpu]",
+    "Pillow",
+    "click",
+]
+
+[project.scripts]
+remove-bg = "remove_bg.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["remove_bg*"]
